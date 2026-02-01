@@ -75,13 +75,11 @@ gg.Div(gg.KV{"class": "container", "id": "main"}, "Content")
 ### Conditional Rendering
 
 ```go
-import "github.com/assaidy/gg/utils"
-
 // Show element only if condition is true
-ggu.If(isLoggedIn, gg.Div("Welcome back!"))
+gg.If(isLoggedIn, gg.Div("Welcome back!"))
 
 // Choose between two options
-ggu.IfElse(isAdmin, gg.Div("Admin"), gg.Div("User"))
+gg.IfElse(isAdmin, gg.Div("Admin"), gg.Div("User"))
 ```
 
 ### Lists and Iteration
@@ -91,14 +89,14 @@ items := []string{"Apple", "Banana"}
 
 // Map over slice
 gg.Ul(
-    ggu.Map(items, func(item string) gg.Node {
+    gg.MapSlice(items, func(item string) gg.Node {
         return gg.Li(item)
     }),
 )
 
 // Repeat N times
 gg.Div(
-    ggu.Repeat(3, func() gg.Node {
+    gg.Repeat(3, func() gg.Node {
         return gg.P("Repeated")
     }),
 )
@@ -160,7 +158,6 @@ package main
 import (
     "os"
     "github.com/assaidy/gg"
-    "github.com/assaidy/gg/utils"
 )
 
 func main() {
@@ -179,7 +176,7 @@ func main() {
                     gg.H1(gg.KV{"class": "text-3xl font-bold mb-4"}, "Dashboard"),
                     
                     // Conditional admin panel
-                    ggu.If(isAdmin,
+                    gg.If(isAdmin,
                         gg.Div(gg.KV{"class": "bg-blue-50 p-4 rounded mb-4"},
                             gg.P(gg.KV{"class": "font-semibold"}, "Admin Panel"),
                         ),
@@ -190,7 +187,7 @@ func main() {
                     
                     // User list
                     gg.Ul(gg.KV{"class": "space-y-2 mt-4"},
-                        ggu.Map(users, func(name string) gg.Node {
+                        gg.MapSlice(users, func(name string) gg.Node {
                             return gg.Li(
                                 gg.KV{"class": "p-2 bg-white rounded shadow"},
                                 name,

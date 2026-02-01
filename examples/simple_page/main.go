@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/assaidy/gg"
-	ggu "github.com/assaidy/gg/utils"
 )
 
 func main() {
@@ -24,7 +23,7 @@ func main() {
 			),
 			gg.Body(
 				// Using IfElse to show conditional content
-				ggu.IfElse(isLoggedIn,
+				gg.IfElse(isLoggedIn,
 					gg.Div(gg.KV{"class": "welcome"},
 						gg.H1(fmt.Sprintf("Welcome back, %s", userName)),
 						gg.P("You are logged in!"),
@@ -37,7 +36,7 @@ func main() {
 
 				// Using If for optional content
 				gg.Hr(),
-				ggu.If(isLoggedIn, // Try to toggle this, and see the result
+				gg.If(isLoggedIn, // Try to toggle this, and see the result
 					gg.Div(gg.KV{"class": "user-actions"},
 						gg.Button("Profile"),
 						" ", // Add a whitespace between the two buttons. not needed if using css styles
@@ -48,7 +47,7 @@ func main() {
 				// Using Repeat to generate repeated elements
 				gg.Hr(),
 				gg.H2("Repeated Elements"),
-				ggu.Repeat(3, func() gg.Node {
+				gg.Repeat(3, func() gg.Node {
 					return gg.Div(gg.KV{"class": "repeated-item"},
 						gg.Li("This is a repeated item"),
 					)
@@ -58,7 +57,7 @@ func main() {
 				gg.Hr(),
 				gg.H2("Mapped List"),
 				gg.Ul(
-					ggu.Map(items, func(item string) gg.Node {
+					gg.MapSlice(items, func(item string) gg.Node {
 						if item == "Apple" {
 							return gg.Li(item, gg.Span(gg.KV{"class": "badge"}, " (Popular)"))
 						}
@@ -71,7 +70,7 @@ func main() {
 				gg.H2("Combined Example"),
 				gg.Div(
 					"Total items: ", gg.Strong(len(items)),
-					ggu.If(len(items) > 2,
+					gg.If(len(items) > 2,
 						gg.P("There are many items to display!"),
 					),
 				),

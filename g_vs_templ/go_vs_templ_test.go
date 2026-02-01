@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/assaidy/gg"
-	"github.com/assaidy/gg/utils"
 )
 
 func getBenchmarkData() []User {
@@ -42,16 +41,16 @@ func BenchmarkG(b *testing.B) {
 			gg.Body(
 				gg.H1(gg.RawHTML("Users List")),
 				gg.Ul(
-					ggu.Map(users, func(u User) gg.Node {
+					gg.MapSlice(users, func(u User) gg.Node {
 						return gg.Li(
 							u.Name,
-							ggu.If(u.Admin, gg.Span(" (Admin)")),
+							gg.If(u.Admin, gg.Span(" (Admin)")),
 						)
 					}),
 				),
-				ggu.If(len(users) == 0, gg.P("No users found.")),
+				gg.If(len(users) == 0, gg.P("No users found.")),
 				gg.Div(
-					ggu.Repeat(5, func() gg.Node {
+					gg.Repeat(5, func() gg.Node {
 						return gg.Hr()
 					}),
 				),

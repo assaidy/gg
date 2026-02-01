@@ -1,6 +1,4 @@
-package ggu
-
-import "github.com/assaidy/gg"
+package gg
 
 // IfElse returns the appropriate value based on a boolean condition.
 //
@@ -37,11 +35,11 @@ func IfElse[T any](condition bool, result, alternative T) T {
 //		If(showHeader, Header(...)),
 //		Main(...),
 //	)
-func If(condition bool, result gg.Node) gg.Node {
+func If(condition bool, result Node) Node {
 	if condition {
 		return result
 	}
-	return gg.Empty()
+	return Empty()
 }
 
 // Repeat generates multiple Nodes by calling a function n times.
@@ -53,19 +51,19 @@ func If(condition bool, result gg.Node) gg.Node {
 // Example:
 //
 //	Ul(
-//		Repeat(5, func() gg.Node {
+//		Repeat(5, func() Node {
 //			return Li("List item")
 //		}),
 //	)
-func Repeat(n int, f func() gg.Node) gg.Node {
-	result := gg.Empty()
+func Repeat(n int, f func() Node) Node {
+	result := Empty()
 	for range n {
 		result.Children = append(result.Children, f())
 	}
 	return result
 }
 
-// Map transforms a slice of items into Nodes by applying a function to each element.
+// MapSlice transforms a slice of items into Nodes by applying a function to each element.
 //
 // Each element in the input slice is transformed using the provided function, and
 // all resulting Nodes are aggregated into a single container Node.
@@ -74,12 +72,12 @@ func Repeat(n int, f func() gg.Node) gg.Node {
 //
 //	items := []string{"Apple", "Banana", "Cherry"}
 //	Ul(
-//		Map(items, func(item string) gg.Node {
+//		MapSlice(items, func(item string) Node {
 //			return Li(item)
 //		}),
 //	)
-func Map[T any](input []T, f func(T) gg.Node) gg.Node {
-	result := gg.Empty()
+func MapSlice[T any](input []T, f func(T) Node) Node {
+	result := Empty()
 	for _, item := range input {
 		result.Children = append(result.Children, f(item))
 	}

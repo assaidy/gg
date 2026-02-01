@@ -1,10 +1,8 @@
-package ggu
+package gg
 
 import (
 	"bytes"
 	"testing"
-
-	"github.com/assaidy/gg"
 )
 
 func TestIfElse(t *testing.T) {
@@ -42,8 +40,8 @@ func TestIfElse(t *testing.T) {
 }
 
 func TestIfElse_Nodes(t *testing.T) {
-	trueNode := gg.Div("true")
-	falseNode := gg.P("false")
+	trueNode := Div("true")
+	falseNode := P("false")
 
 	tests := []struct {
 		name      string
@@ -66,7 +64,7 @@ func TestIfElse_Nodes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			node := IfElse(tt.condition, trueNode, falseNode)
 			var buf bytes.Buffer
-			err := gg.Render(&buf, node)
+			err := Render(&buf, node)
 			if err != nil {
 				t.Errorf("IfElse() node render error: %v", err)
 				return
@@ -79,7 +77,7 @@ func TestIfElse_Nodes(t *testing.T) {
 }
 
 func TestIf(t *testing.T) {
-	node := gg.Div("content")
+	node := Div("content")
 
 	tests := []struct {
 		name      string
@@ -102,7 +100,7 @@ func TestIf(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			resultNode := If(tt.condition, node)
 			var buf bytes.Buffer
-			err := gg.Render(&buf, resultNode)
+			err := Render(&buf, resultNode)
 			if err != nil {
 				t.Errorf("If() node render error: %v", err)
 				return
@@ -118,34 +116,34 @@ func TestRepeat(t *testing.T) {
 	tests := []struct {
 		name     string
 		n        int
-		f        func() gg.Node
+		f        func() Node
 		expected string
 	}{
 		{
 			name:     "Repeat zero times",
 			n:        0,
-			f:        func() gg.Node { return gg.Div() },
+			f:        func() Node { return Div() },
 			expected: "",
 		},
 		{
 			name:     "Repeat once",
 			n:        1,
-			f:        func() gg.Node { return gg.Div("item") },
+			f:        func() Node { return Div("item") },
 			expected: "<div>item</div>",
 		},
 		{
 			name:     "Repeat multiple times",
 			n:        3,
-			f:        func() gg.Node { return gg.Div("item") },
+			f:        func() Node { return Div("item") },
 			expected: "<div>item</div><div>item</div><div>item</div>",
 		},
 		{
 			name: "Repeat with different content",
 			n:    2,
-			f: func() gg.Node {
+			f: func() Node {
 				static := 0
 				static++
-				return gg.Div(string(rune('a' + static)))
+				return Div(string(rune('a' + static)))
 			},
 			expected: "<div>b</div><div>b</div>",
 		},
@@ -155,7 +153,7 @@ func TestRepeat(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			resultNode := Repeat(tt.n, tt.f)
 			var buf bytes.Buffer
-			err := gg.Render(&buf, resultNode)
+			err := Render(&buf, resultNode)
 			if err != nil {
 				t.Errorf("Repeat() node render error: %v", err)
 				return
@@ -167,39 +165,39 @@ func TestRepeat(t *testing.T) {
 	}
 }
 
-func TestMap(t *testing.T) {
+func TestMapSlice(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    []string
-		f        func(string) gg.Node
+		f        func(string) Node
 		expected string
 	}{
 		{
-			name:     "Map empty slice",
+			name:     "MapSlice empty slice",
 			input:    []string{},
-			f:        func(s string) gg.Node { return gg.Li(s) },
+			f:        func(s string) Node { return Li(s) },
 			expected: "",
 		},
 		{
-			name:     "Map single item",
+			name:     "MapSlice single item",
 			input:    []string{"apple"},
-			f:        func(s string) gg.Node { return gg.Li(s) },
+			f:        func(s string) Node { return Li(s) },
 			expected: "<li>apple</li>",
 		},
 		{
-			name:     "Map multiple items",
+			name:     "MapSlice multiple items",
 			input:    []string{"apple", "banana", "cherry"},
-			f:        func(s string) gg.Node { return gg.Li(s) },
+			f:        func(s string) Node { return Li(s) },
 			expected: "<li>apple</li><li>banana</li><li>cherry</li>",
 		},
 		{
-			name:  "Map with conditional logic",
+			name:  "MapSlice with conditional logic",
 			input: []string{"apple", "banana"},
-			f: func(s string) gg.Node {
+			f: func(s string) Node {
 				if s == "apple" {
-					return gg.Li(s, gg.Span(" (popular)"))
+					return Li(s, Span(" (popular)"))
 				}
-				return gg.Li(s)
+				return Li(s)
 			},
 			expected: "<li>apple<span> (popular)</span></li><li>banana</li>",
 		},
@@ -207,34 +205,34 @@ func TestMap(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			resultNode := Map(tt.input, tt.f)
+			resultNode := MapSlice(tt.input, tt.f)
 			var buf bytes.Buffer
-			err := gg.Render(&buf, resultNode)
+			err := Render(&buf, resultNode)
 			if err != nil {
-				t.Errorf("Map() node render error: %v", err)
+				t.Errorf("MapSlice() node render error: %v", err)
 				return
 			}
 			if buf.String() != tt.expected {
-				t.Errorf("Map() node render = %v, want %v", buf.String(), tt.expected)
+				t.Errorf("MapSlice() node render = %v, want %v", buf.String(), tt.expected)
 			}
 		})
 	}
 }
 
-func TestMap_Integers(t *testing.T) {
+func TestMapSlice_Integers(t *testing.T) {
 	numbers := []int{1, 2, 3}
-	resultNode := Map(numbers, func(n int) gg.Node {
-		return gg.Div(string(rune('0' + n)))
+	resultNode := MapSlice(numbers, func(n int) Node {
+		return Div(string(rune('0' + n)))
 	})
 
 	var buf bytes.Buffer
-	err := gg.Render(&buf, resultNode)
+	err := Render(&buf, resultNode)
 	if err != nil {
-		t.Errorf("Map() integers node render error: %v", err)
+		t.Errorf("MapSlice() integers node render error: %v", err)
 		return
 	}
 	expected := "<div>1</div><div>2</div><div>3</div>"
 	if buf.String() != expected {
-		t.Errorf("Map() integers node render = %v, want %v", buf.String(), expected)
+		t.Errorf("MapSlice() integers node render = %v, want %v", buf.String(), expected)
 	}
 }
