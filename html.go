@@ -185,8 +185,11 @@ func newElem(tag string, args ...any) Element {
 
 func newVoidElem(tag string, attrs ...KV) Element {
 	e := Element{Tag: tag, IsVoid: true}
-	for _, attr := range attrs {
-		maps.Copy(e.Attrs, attr)
+	if len(attrs) > 0 {
+		e.Attrs = KV{}
+		for _, attr := range attrs {
+			maps.Copy(e.Attrs, attr)
+		}
 	}
 	return e
 }
